@@ -1,9 +1,10 @@
 require 'temple' 
 require 'beard/template'   
 require 'beard/context' 
-require 'beard/settings'   
+require 'beard/settings'  
+require 'beard/parser' 
 require 'beard/generators'
-require 'beard/compiler'
+require 'beard/compiler' 
 require 'beard/engine'    
 
 class Beard
