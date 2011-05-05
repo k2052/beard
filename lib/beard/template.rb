@@ -12,14 +12,12 @@ class Beard
 		end     
 		
 		def render(context)   
-			ctx = context     
-      compiled = "def render(ctx) context = ctx; #{compile} end"
-      instance_eval(compiled, __FILE__, __LINE__ - 1)
-      render(ctx)
+      ctx = context;
+      eval(compile)
     end
 
-    def compile(src = @source)  
-      eval(@engine.call(src))
+    def compile(src = @source)     
+      @engine.call(src)
     end
     alias_method :to_s, :compile
 
