@@ -45,8 +45,8 @@ class Beard
        [:block,   'end']]
 		end  
 		
-		def on_beard_partial(name)
-      [:dynamic, ev("ctx[#{name[2].to_s.to_sym.inspect}], #{indentation.inspect})")]
+		def on_beard_partial(name, indentation)
+      [:dynamic, "ctx.partial(#{name.to_sym.inspect}, #{indentation.inspect})"]
     end
 		   
 		def on_beard_fetch(names)
