@@ -13,13 +13,20 @@ class Beard
 			@generator.call(exp)
 		end
 
-    def on_beard_utag(name)
-			[:dynamic, "ctx[#{name[2].to_s.to_sym.inspect}]"]
+    def on_beard_utag(name)   
+	    if name[2].count > 1  
+				[:dynamic, "ctx.fetch_depth(%w(#{name[2].join(' ')}))"] 
+			else
+				[:dynamic, "ctx[#{name[2].to_s.to_sym.inspect}]"]
+			end
     end
     
-    # @todo Need to let Temple handle escaping
 	  def on_beard_etag(name)  
-		  [:dynamic, "Temple::Utils.escape_html(ctx[#{name[2].to_s.to_sym.inspect}])"]
+		  if name[2].count > 1  
+				[:dynamic, "Temple::Utils.escape_html(ctx.fetch_depth(%w(#{name[2].join(' ')})))"] 
+			else
+				[:dynamic, "Temple::Utils.escape_html(ctx[#{name[2].to_s.to_sym.inspect}])"]
+			end
     end
 
 		def on_beard_section(name, content, raw, delims)    

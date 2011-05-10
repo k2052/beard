@@ -62,6 +62,25 @@ class Beard
 				return beard.send(name.to_sym) if beard.respond_to?(name.to_sym) 
 			end 
 			return nil
+		end    
+		
+		def fetch_depth(names) 
+			obj = nil
+			names.each_with_index do |name, count|
+				if obj == nil  
+					obj = fetch(name)
+				else      
+					if obj.respond_to?('has_key?')    
+						return obj[name.to_sym] if obj.has_key?(name.to_sym) 
+					end   
+					if obj.respond_to?(name.to_sym)    
+						return obj.send(name.to_sym)
+					end
+				end
+				if name == names.last
+					return obj
+				end 
+			end   
 		end
 
     def stack()
