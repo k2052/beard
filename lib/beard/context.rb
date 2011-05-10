@@ -91,13 +91,13 @@ class Beard
 			@stack = @stack
 		end 
 		
-		def method_missing(name, *args)    
+		def method_missing(name, *args, &block)    
 			if current.respond_to?(name.to_sym)  
-				return current.send(name.to_sym)
+				return current.send(name.to_sym, *args, &block)
 			end
 			@stack.each do |obj|   
 				if obj.respond_to?(name.to_sym)    
-					return obj.send(name.to_sym)
+					return obj.send(name.to_sym, *args, &block)
 				end   
 			end 
 		end 
