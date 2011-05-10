@@ -34,7 +34,6 @@ class Beard
 
       tmp1, tmp2 = tmp_var(:dict), tmp_var(:dict)
       [:multi, 
-	     [:block,   "context.current = ctx[#{name[2].to_s.to_sym.inspect}]"],
        [:block,   "if #{tmp1} = ctx[#{name[2].to_s.to_sym.inspect}]"],    
        [:block,   "  if #{tmp1} == true"],
        content,
