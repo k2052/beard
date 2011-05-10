@@ -47,14 +47,14 @@ class Beard
 
     def fetch(name)
 			if current.respond_to?('has_key?')
-				return current[name] if current.has_key?(name.to_sym) 
+				return current[name.to_sym] if current.has_key?(name.to_sym) 
 			end   
 			if current.respond_to?(name.to_sym)  
 				return current.send(name.to_sym)
 			end
-	    @stack.each do |obj| 
+	    @stack.each do |obj|   
 				if obj.respond_to?('has_key?')    
-					return obj[name] if obj.has_key?(name.to_sym) 
+					return obj[name.to_sym] if obj.has_key?(name.to_sym) 
 				end   
 				if obj.respond_to?(name.to_sym)    
 					return obj.send(name.to_sym)
