@@ -46,23 +46,49 @@ class Beard
 		end
 
     def fetch(name)
-			if current.respond_to?('has_key?')
-				return current[name.to_sym] if current.has_key?(name.to_sym) 
-			end   
-			if current.respond_to?(name.to_sym)  
-				return current.send(name.to_sym)
-			end
+	    return current if current == name 
+			value = find(current, name, :__missing)
+      if value != :__missing
+        return value
+      end   
+			
 	    @stack.each do |obj|   
-				if obj.respond_to?('has_key?')    
-					return obj[name.to_sym] if obj.has_key?(name.to_sym) 
-				end   
-				if obj.respond_to?(name.to_sym)    
-					return obj.send(name.to_sym)
-				end 
-				return beard.send(name.to_sym) if beard.respond_to?(name.to_sym) 
-			end 
+				value = find(obj, name, :__missing)
+        if value != :__missing
+          return value
+        end          
+			end  
+			if current.respond_to?('each')   
+				current.each do |obj|    
+					value = find(obj, name, :__missing)
+	        if value != :__missing
+	          return value
+	        end                 
+				end    
+			end  
+			return beard.send(name.to_sym) if beard.respond_to?(name.to_sym) 
+						
 			return nil
-		end    
+		end   
+		
+		def find(obj, key, default = nil)
+      hash = obj.respond_to?(:has_key?)
+
+      if hash && obj.has_key?(key)
+        obj[key]
+      elsif hash && obj.has_key?(key.to_s)
+        obj[key.to_s]
+      elsif !hash && obj.respond_to?(key)
+        meth = obj.method(key) rescue proc { obj.send(key) }
+        if meth.arity == 1
+          meth.to_proc
+        else
+          meth[]
+        end   
+      else
+        default
+      end
+    end    
 		
 		def fetch_depth(names) 
 			obj = nil
