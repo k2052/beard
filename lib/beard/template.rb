@@ -12,7 +12,7 @@ class Beard
 		end     
 		
 		def render(context)   
-      ctx = context;
+      ctx = context
       eval(compile)
     end
 
