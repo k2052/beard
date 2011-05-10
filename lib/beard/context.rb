@@ -89,7 +89,18 @@ class Beard
 	
 		def stack=(stack)
 			@stack = @stack
-		end  
+		end 
+		
+		def method_missing(name, *args)    
+			if current.respond_to?(name.to_sym)  
+				return current.send(name.to_sym)
+			end
+			@stack.each do |obj|   
+				if obj.respond_to?(name.to_sym)    
+					return obj.send(name.to_sym)
+				end   
+			end 
+		end 
 
 	end
 end
