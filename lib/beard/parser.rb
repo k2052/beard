@@ -10,24 +10,24 @@ class Beard
     
     #set_default_options :tabsize  => 4    
 
-	  class SyntaxError < StandardError
-	    def initialize(message, position)
-	      @message = message
-	      @lineno, @column, @line, _ = position
-	      @stripped_line = @line.strip
-	      @stripped_column = @column - (@line.size - @line.lstrip.size)
-	    end
+    class SyntaxError < StandardError
+      def initialize(message, position)
+        @message = message
+        @lineno, @column, @line, _ = position
+        @stripped_line = @line.strip
+        @stripped_column = @column - (@line.size - @line.lstrip.size)
+      end
 
-	    def to_s
-	      <<-EOF
+      def to_s
+        <<-EOF
 #{@message}
-	Line #{@lineno}
-	  #{@stripped_line}
-	  #{' ' * @stripped_column}^   
+  Line #{@lineno}
+    #{@stripped_line}
+    #{' ' * @stripped_column}^   
 EOF
-	    end 
-		end   
-		
+      end 
+    end   
+    
     SKIP_WHITESPACE = [ '#', '^', '/', '<', '>', '=', '!' ]
     ALLOWED_CONTENT = /(\w|[?!\/.-])*/
     ANY_CONTENT = [ '!', '=' ]  
@@ -44,8 +44,8 @@ EOF
       @ctag ||= '}}'
     end       
 
-		def call(template) 			
-			if template.respond_to?(:encoding)
+    def call(template)      
+      if template.respond_to?(:encoding)
         @encoding = template.encoding
         template = template.dup.force_encoding("BINARY")
       else
@@ -69,9 +69,9 @@ EOF
       end
 
       @result
-		end   
-		
-		# Find {{mustaches}} and add them to the @result array.
+    end   
+    
+    # Find {{mustaches}} and add them to the @result array.
     def scan_tags
       # Scan until we hit an opening delimiter.
       start_of_line      = @scanner.beginning_of_line?
@@ -228,5 +228,5 @@ EOF
       raise SyntaxError.new(message, pos)
     end
 
-	end
+  end
 end

@@ -1,36 +1,36 @@
 class Beard
-	class Compiler < Temple::Filter   
+  class Compiler < Temple::Filter   
 
-	  temple_dispatch :beard     
-	
-		def initialize(options = {})    
-			@generator = Temple::Generators::String.new 
-		end 
-		
-		# Generates a fully compiled string ready to be evaled.
-	  def compile_final(exp, buffer)   
-		  @generator.buffer = buffer
-			@generator.call(exp)
-		end
+    temple_dispatch :beard     
+  
+    def initialize(options = {})    
+      @generator = Temple::Generators::String.new 
+    end 
+    
+    # Generates a fully compiled string ready to be evaled.
+    def compile_final(exp, buffer)   
+      @generator.buffer = buffer
+      @generator.call(exp)
+    end
 
     def on_beard_utag(name)   
-	    if name[2].count > 1  
-				[:dynamic, "ctx.fetch_depth(%w(#{name[2].join(' ')}))"] 
-			else
-				[:dynamic, "ctx[#{name[2].to_s.to_sym.inspect}]"]
-			end
+      if name[2].count > 1  
+        [:dynamic, "ctx.fetch_depth(%w(#{name[2].join(' ')}))"] 
+      else
+        [:dynamic, "ctx[#{name[2].to_s.to_sym.inspect}]"]
+      end
     end
     
-	  def on_beard_etag(name)  
-		  if name[2].count > 1  
-				[:dynamic, "Temple::Utils.escape_html(ctx.fetch_depth(%w(#{name[2].join(' ')})))"] 
-			else
-				[:dynamic, "Temple::Utils.escape_html(ctx[#{name[2].to_s.to_sym.inspect}])"]
-			end
+    def on_beard_etag(name)  
+      if name[2].count > 1  
+        [:dynamic, "Temple::Utils.escape_html(ctx.fetch_depth(%w(#{name[2].join(' ')})))"] 
+      else
+        [:dynamic, "Temple::Utils.escape_html(ctx[#{name[2].to_s.to_sym.inspect}])"]
+      end
     end
 
-		def on_beard_section(name, content, raw, delims)    
-			content = compile(content)
+    def on_beard_section(name, content, raw, delims)    
+      content = compile(content)
 
       tmp1, tmp2 = tmp_var(:dict), tmp_var(:dict)
       [:multi, 
@@ -43,19 +43,19 @@ class Beard
        [:block,   "    #{tmp2} = ctx"],
        [:block,   "    #{tmp1}.each {|child|"],    
        [:block,   "    context.current = child"],
-			      		       content,
+                       content,
        [:block,   '    }'],
        [:block,   "    ctx = #{tmp2}"],
-	     [:block,   "    context.current = ctx[#{name[2].to_s.to_sym.inspect}]"],
+       [:block,   "    context.current = ctx[#{name[2].to_s.to_sym.inspect}]"],
        [:block,   '  end'],      
        [:block,   'end']]
-		end  
-		
-		def on_beard_partial(name, indentation)
+    end  
+    
+    def on_beard_partial(name, indentation)
       [:dynamic, "ctx.partial(#{name.to_sym.inspect}, #{indentation.inspect})"]
     end
-		   
-		def on_beard_fetch(names)
+       
+    def on_beard_fetch(names)
       names = names.map { |n| n.to_sym }
 
       if names.length == 0
@@ -72,9 +72,9 @@ class Beard
       end
     end
 
-		def qv(s)
+    def qv(s)
       "#{s}"
     end
-	 
-	end
+   
+  end
 end
